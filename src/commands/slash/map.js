@@ -10,7 +10,6 @@ const {
   getLocalization,
   getGuildInfo,
   translate,
-  availableLanguages,
 } = require("../../../util/i18n");
 const Map = require("../../../util/database/models/Map");
 
@@ -57,7 +56,7 @@ module.exports = {
         .addSeparatorComponents((separator) => separator)
         .addTextDisplayComponents((textDisplay) =>
           textDisplay.setContent(
-            translate(currentLang, "commands.map.error.undefined.title"),
+            translate(currentLang, "commands.map.error.undefined.description"),
           ),
         )
         .addSeparatorComponents((separator) => separator)
@@ -82,7 +81,9 @@ module.exports = {
     const container = new ContainerBuilder()
       .setAccentColor(config.colors.normal)
       .addTextDisplayComponents((t) =>
-        t.setContent(`## 🗺️ ${mapInfo.translations.get(currentLang)}`),
+        t.setContent(
+          `## 🗺️ ${mapInfo.translations.get(currentLang) || mapInfo.id}`,
+        ),
       )
       .addSeparatorComponents((s) => s)
       .addSectionComponents((section) =>

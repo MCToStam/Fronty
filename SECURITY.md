@@ -6,16 +6,16 @@ If you discover a security vulnerability in Fronty, please do not create a publi
 
 Instead, send a private report including:
 
-* A description of the vulnerability
-* The steps to reproduce it
-* The potential impact
-* Any useful information that could help fix the issue
+- A description of the vulnerability
+- The steps to reproduce it
+- The potential impact
+- Any useful information that could help fix the issue
 
 ## Contact
 
 To report a vulnerability, use:
 
-* GitHub Security Advisories: https://github.com/MCToStam/Fronty/security/advisories
+- GitHub Security Advisories: https://github.com/MCToStam/Fronty/security/advisories
 
 or contact the project maintainer directly.
 

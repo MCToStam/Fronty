@@ -1,5 +1,7 @@
 const { ActivityType } = require("discord.js");
+const cron = require("cron");
 const log = require("../../../util/module/log");
+const updateMaps = require("../../../util/updateMaps");
 
 const evalFn = (c) => ({
   guilds: c.guilds.cache.size,
@@ -66,4 +68,16 @@ module.exports = async (client) => {
   );
 
   cycleStatus(client);
+
+  if (client.cluster?.id === 0) {
+    cron.schedule(
+      "0 0 * * *",
+      async () => {
+        await updateMaps();
+      },
+      {
+        timezone: "Europe/Paris",
+      },
+    );
+  }
 };

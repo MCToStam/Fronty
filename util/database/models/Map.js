@@ -21,7 +21,7 @@ const nationSchema = new mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const mapSizeSchema = new mongoose.Schema(
@@ -32,7 +32,7 @@ const mapSizeSchema = new mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const mapSchema = new mongoose.Schema({

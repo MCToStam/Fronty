@@ -1,7 +1,7 @@
 {
-  "name": "pokemon-tournament-bot",
+  "name": "fronty",
   "version": "1.0.0",
-  "description": "pokemon-tournament-bot",
+  "description": "Your OpenFront Clan companion. Track wins and rankings for your clan members. Look up live game stats, scan recent matches, and climb the leaderboard — all without leaving Discord.",
   "main": "main.js",
   "scripts": {
     "start": "node start.js",
@@ -14,17 +14,15 @@
     "undici": "6.21.3"
   },
   "dependencies": {
+    "cron": "^4.4.0",
     "discord-hybrid-sharding": "^3.0.1",
     "discord.js": "^14.26.4",
     "dotenv": "^17.4.2",
-    "fs-extra": "^11.3.6",
-    "mongoose": "^9.7.2",
-    "playwright": "^1.61.1",
-    "simple-git": "^3.36.0"
+    "mongoose": "^9.8.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "eslint": "^10.2.0",
+    "eslint": "^10.8.0",
     "globals": "^17.4.0"
   }
 }

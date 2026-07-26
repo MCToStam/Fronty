@@ -10,7 +10,6 @@ const {
   getLocalization,
   getGuildInfo,
   translate,
-  availableLanguages,
 } = require("../../../util/i18n");
 const { OpenFrontAPI } = require("../../../util/openfront-api");
 
