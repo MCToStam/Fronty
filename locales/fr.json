@@ -1,0 +1,108 @@
+{
+  "type": { "label": "Français", "flag": "🇫🇷" },
+  "commands": {
+    "configuration": {
+      "data": {
+        "name": "configuration",
+        "description": "Configure les données de ton serveur"
+      },
+      "title": "Configuration",
+      "language": { "text": "Langage", "select": "Choisit ta langue" }
+    },
+    "clan": {
+      "data": {
+        "name": "clan",
+        "description": "Affiche les informations d'un clan",
+        "options": {
+          "tag": {
+            "name": "tag",
+            "description": "Tag du clan (Ex: UN, AST, ...)"
+          }
+        }
+      },
+      "rank": "Rang",
+      "description": {
+        "title": "Description",
+        "nothing": "Aucune description spécifiée"
+      },
+      "members": { "singular": "Membre", "plural": "Membres" },
+      "status": {
+        "title": "Statut",
+        "open": "Ouvert",
+        "close": "Invitation Seulement"
+      },
+      "creation": "Création",
+      "discord_server": "Serveur Discord",
+      "join": "Rejoindre le Clan",
+      "stats": {
+        "games": {
+          "singular": "Partie",
+          "plural": "Parties"
+        },
+        "wins": {
+          "singular": "Victoire",
+          "plural": "Victoires",
+          "score": "Score de Victoire"
+        },
+        "losses": {
+          "singular": "Défaite",
+          "plural": "Défaites",
+          "score": "Score de Défaite"
+        },
+        "ratio": { "normal": "Ratio", "score": "Ratio des Scores" }
+      }
+    },
+    "map": {
+      "data": {
+        "name": "map",
+        "description": "Affiche les informations d'une map",
+        "options": {
+          "name": {
+            "name": "nom",
+            "description": "Nom de la map (Ex: Achiran, Aegean, ...)"
+          }
+        },
+        "error": {
+          "undefined": {
+            "title": "Map Introuvable",
+            "description": "Cette map n'existe pas ou n'a pas été recensée dans nos données."
+          }
+        },
+        "size": "Dimension",
+        "nation": { "plural": "Nations", "singular": "Nation" },
+        "category": { "plural": "Catégories", "singular": "Catégorie" }
+      }
+    }
+  },
+  "container": {
+    "error": {
+      "title": "Erreur",
+      "description": "Une erreur est survenue lors de l'exécution de cette intéraction. Si le problème se reproduit, il est important de le signaler sur le serveur support.",
+      "support_server": "Serveur Support"
+    },
+    "forbidden": {
+      "title": "Intéraction Interdite",
+      "description": "Vous n'avez pas la permission d'intéragir ce message car vous n'êtes pas l'auteur de la commande."
+    },
+    "disable": {
+      "title": "Commande Désactivée",
+      "description": "Cette commande est désactivé et donc inaccessible."
+    },
+    "cooldown": {
+      "title": "Cooldown",
+      "description": "Cette commande est actuellement sous cooldown, tu pourras la réutiliser"
+    }
+  },
+  "log": {
+    "error": {
+      "title": "Erreur",
+      "action": "Action Éffectuée",
+      "error": "Erreur"
+    },
+    "log": {
+      "title": "Log",
+      "user": "Utilisateur",
+      "value": "Valeur"
+    }
+  }
+}

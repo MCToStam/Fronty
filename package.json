@@ -1,0 +1,30 @@
+{
+  "name": "pokemon-tournament-bot",
+  "version": "1.0.0",
+  "description": "pokemon-tournament-bot",
+  "main": "main.js",
+  "scripts": {
+    "start": "node start.js",
+    "clean": "npx prettier . --write",
+    "format": "node .vscode/clean.js"
+  },
+  "author": "ToStam",
+  "license": "MIT",
+  "overrides": {
+    "undici": "6.21.3"
+  },
+  "dependencies": {
+    "discord-hybrid-sharding": "^3.0.1",
+    "discord.js": "^14.26.4",
+    "dotenv": "^17.4.2",
+    "fs-extra": "^11.3.6",
+    "mongoose": "^9.7.2",
+    "playwright": "^1.61.1",
+    "simple-git": "^3.36.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "globals": "^17.4.0"
+  }
+}

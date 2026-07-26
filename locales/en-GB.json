@@ -1,0 +1,108 @@
+{
+  "type": { "label": "English", "flag": "🇬🇧" },
+  "commands": {
+    "configuration": {
+      "data": {
+        "name": "configuration",
+        "description": "Configure your server data"
+      },
+      "title": "Configuration",
+      "language": { "text": "Language", "select": "Choose your language" }
+    },
+    "clan": {
+      "data": {
+        "name": "clan",
+        "description": "Displays clan information",
+        "options": {
+          "tag": {
+            "name": "tag",
+            "description": "Clan tag (Ex: UN, AST, ...)"
+          }
+        }
+      },
+      "rank": "Rank",
+      "description": {
+        "title": "Description",
+        "nothing": "No description specified"
+      },
+      "members": { "singular": "Member", "plural": "Members" },
+      "status": {
+        "title": "Status",
+        "open": "Open",
+        "close": "Invite Only"
+      },
+      "creation": "Creation",
+      "discord_server": "Discord Serveur",
+      "join": "Join the Clan",
+      "stats": {
+        "games": {
+          "singular": "Game",
+          "plural": "Games"
+        },
+        "wins": {
+          "singular": "Win",
+          "plural": "Wins",
+          "score": "Win Score"
+        },
+        "losses": {
+          "singular": "Loss",
+          "plural": "Losses",
+          "score": "Loss Score"
+        },
+        "ratio": { "normal": "Ratio", "score": "Score Ratio" }
+      }
+    },
+    "map": {
+      "data": {
+        "name": "map",
+        "description": "Displays information about a map",
+        "options": {
+          "name": {
+            "name": "name",
+            "description": "Name of the map (Ex: Achiran, Aegean, ...)"
+          }
+        }
+      },
+      "error": {
+        "undefined": {
+          "title": "Map Not Found",
+          "description": "This map does not exist or has not been recorded in our data."
+        }
+      },
+      "size": "Dimension",
+      "nation": { "plural": "Nations", "singular": "Nation" },
+      "category": { "plural": "Categories", "singular": "Category" }
+    }
+  },
+  "container": {
+    "error": {
+      "title": "Error",
+      "description": "An error occurred while executing this interaction. If the problem persists, it is important to report it on the support server.",
+      "support_server": "Support Server"
+    },
+    "forbidden": {
+      "title": "Forbidden Interaction",
+      "description": "You do not have permission to interact with this message because you are not the author of the order."
+    },
+    "disable": {
+      "title": "Command Disabled",
+      "description": "This command is disabled and therefore inaccessible."
+    },
+    "cooldown": {
+      "title": "Cooldown",
+      "description": "This command is currently on cooldown; you'll be able to use it again"
+    }
+  },
+  "log": {
+    "error": {
+      "title": "Error",
+      "action": "Action Performed",
+      "error": "Error"
+    },
+    "log": {
+      "title": "Log",
+      "user": "User",
+      "value": "Value"
+    }
+  }
+}
