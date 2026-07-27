@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const log = require("../../util/module/log");
+const log = require("../module/log");
 
 let cached = global.mongoose;
 
@@ -17,11 +17,10 @@ async function connectMongo() {
 
   if (!cached.promise) {
     cached.promise = mongoose
-      .createConnection(process.env.MONGO_URI)
-      .asPromise()
-      .then((connection) => {
+      .connect(process.env.MONGO_URI)
+      .then((mongooseInstance) => {
         log("MongoDB est correctement connecté", "READY", "green");
-        return connection;
+        return mongooseInstance;
       })
       .catch((err) => {
         cached.promise = null;
@@ -34,11 +33,6 @@ async function connectMongo() {
   return cached.conn;
 }
 
-function getConnection() {
-  return cached.conn;
-}
-
 module.exports = {
   connectMongo,
-  getConnection,
 };

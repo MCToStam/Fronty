@@ -20,6 +20,12 @@
           }
         }
       },
+      "error": {
+        "undefined": {
+          "title": "Clan Introuvable",
+          "description": "Ce clan n'existe pas ou n'a pas été recensé dans nos données."
+        }
+      },
       "rank": "Rang",
       "description": {
         "title": "Description",

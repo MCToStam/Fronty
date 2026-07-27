@@ -12,6 +12,7 @@ const {
   translate,
 } = require("../../../util/i18n");
 const { OpenFrontAPI } = require("../../../util/openfront-api");
+const Clan = require("../../../util/database/models/Clan");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -47,7 +48,29 @@ module.exports = {
       flags: MessageFlags.IsComponentsV2,
     });
 
-    const clan = await OpenFrontAPI(`https://api.openfront.io/clans/${tag}`);
+    const clan = await Clan.findOne({ tag: tag });
+
+    if (!clan) {
+      const errorContainer = new ContainerBuilder()
+        .setAccentColor(config.colors.error)
+        .addTextDisplayComponents((textDisplay) =>
+          textDisplay.setContent(
+            `## ❌ ${translate(currentLang, "commands.clan.error.undefined.title")}`,
+          ),
+        )
+        .addSeparatorComponents((separator) => separator)
+        .addTextDisplayComponents((textDisplay) =>
+          textDisplay.setContent(
+            translate(currentLang, "commands.clan.error.undefined.description"),
+          ),
+        );
+
+      return await interaction.editReply({
+        components: [container],
+        flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+      });
+    }
+
     const top = await OpenFrontAPI(
       "https://api.openfront.io/public/clans/leaderboard",
     );

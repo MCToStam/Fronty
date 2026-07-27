@@ -1,23 +1,36 @@
-let tokenCache = {
-  jwt: null,
-  expiresAt: 0,
-};
-
 const apiCache = new Map();
 
 const CACHE_DURATION = 60 * 1000;
 
-async function getToken() {
+const tokenCache = {
+  default: {
+    jwt: null,
+    expiresAt: 0,
+  },
+  refresh: {
+    jwt: null,
+    expiresAt: 0,
+  },
+};
+
+async function getToken({ withRefreshToken = false } = {}) {
+  const cache = withRefreshToken ? tokenCache.refresh : tokenCache.default;
+
   const now = Date.now();
 
-  if (tokenCache.jwt && tokenCache.expiresAt > now + 30000) {
-    return tokenCache.jwt;
+  if (cache.jwt && cache.expiresAt > now + 30000) {
+    return cache.jwt;
   }
 
   const response = await fetch("https://api.openfront.io/auth/refresh", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...(withRefreshToken
+        ? {
+            Cookie: `refreshToken=${process.env.OPENFRONT_REFRESH_TOKEN}`,
+          }
+        : {}),
     },
   });
 
@@ -31,10 +44,10 @@ async function getToken() {
     throw new Error("Réponse auth invalide : JWT manquant");
   }
 
-  tokenCache.jwt = data.jwt;
-  tokenCache.expiresAt = now + data.expiresIn * 1000;
+  cache.jwt = data.jwt;
+  cache.expiresAt = now + data.expiresIn * 1000;
 
-  return tokenCache.jwt;
+  return cache.jwt;
 }
 
 async function OpenFrontAPI(url, options = {}) {
@@ -46,31 +59,32 @@ async function OpenFrontAPI(url, options = {}) {
     return cached.data;
   }
 
-  const jwt = await getToken();
+  const { withRefreshToken = false, ...fetchOptions } = options;
+
+  const jwt = await getToken({ withRefreshToken });
 
   let response = await fetch(url, {
-    ...options,
-
+    ...fetchOptions,
     headers: {
-      ...(options.headers || {}),
-
+      ...(fetchOptions.headers || {}),
       Authorization: `Bearer ${jwt}`,
       "Content-Type": "application/json",
     },
   });
 
-  if (response.status === 401) {
-    tokenCache.jwt = null;
-    tokenCache.expiresAt = 0;
+  if (response.status === 401 || response.status === 403) {
+    const cache = withRefreshToken ? tokenCache.refresh : tokenCache.default;
 
-    const newToken = await getToken();
+    cache.jwt = null;
+    cache.expiresAt = 0;
+
+    const newToken = await getToken({ withRefreshToken });
 
     response = await fetch(url, {
-      ...options,
+      ...fetchOptions,
 
       headers: {
-        ...(options.headers || {}),
-
+        ...(fetchOptions.headers || {}),
         Authorization: `Bearer ${newToken}`,
         "Content-Type": "application/json",
       },

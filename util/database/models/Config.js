@@ -1,9 +1,5 @@
 const mongoose = require("mongoose");
 
-const { getConnection } = require("../index");
-
-const connection = getConnection();
-
 const configSchema = new mongoose.Schema({
   guildId: {
     type: String,
@@ -17,4 +13,5 @@ const configSchema = new mongoose.Schema({
   },
 });
 
-module.exports = connection.model("Config", configSchema);
+module.exports =
+  mongoose.models.Config || mongoose.model("Config", configSchema);

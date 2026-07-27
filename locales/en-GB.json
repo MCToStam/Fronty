@@ -20,6 +20,12 @@
           }
         }
       },
+      "error": {
+        "undefined": {
+          "title": "Clan Not Found",
+          "description": "This clan does not exist or has not been recorded in our data."
+        }
+      },
       "rank": "Rank",
       "description": {
         "title": "Description",

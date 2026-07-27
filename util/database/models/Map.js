@@ -1,9 +1,5 @@
 const mongoose = require("mongoose");
 
-const { getConnection } = require("../index");
-
-const connection = getConnection();
-
 const nationSchema = new mongoose.Schema(
   {
     name: {
@@ -86,4 +82,4 @@ const mapSchema = new mongoose.Schema({
   },
 });
 
-module.exports = connection.model("Map", mapSchema);
+module.exports = mongoose.models.Map || mongoose.model("Map", mapSchema);

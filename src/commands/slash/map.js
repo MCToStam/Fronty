@@ -58,18 +58,6 @@ module.exports = {
           textDisplay.setContent(
             translate(currentLang, "commands.map.error.undefined.description"),
           ),
-        )
-        .addSeparatorComponents((separator) => separator)
-        .addActionRowComponents(
-          new ActionRowBuilder().addComponents(
-            new ButtonBuilder()
-              .setURL("https://discord.gg/tFkb9nYSd8")
-              .setEmoji("1307452239052279858")
-              .setLabel(
-                translate(currentLang, "container.error.support_server"),
-              )
-              .setStyle(ButtonStyle.Link),
-          ),
         );
 
       return await interaction.editReply({
