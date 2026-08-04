@@ -80,6 +80,7 @@ async function getMembersWithJoinFallback(tag) {
 function formatMembers(members) {
   return members.map((member) => ({
     publicId: member.publicId,
+    username: member.username,
     role: member.role,
     joinedAt: new Date(member.joinedAt),
   }));
@@ -96,6 +97,7 @@ async function saveClan(clan, members = []) {
       description: clan.description,
       isOpen: clan.isOpen,
       members: members,
+      discordUrl: clan.discordUrl,
       memberCount: clan.memberCount,
       createdAt: new Date(clan.createdAt),
     },

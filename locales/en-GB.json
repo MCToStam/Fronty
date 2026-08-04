@@ -20,6 +20,11 @@
           }
         }
       },
+      "select": {
+        "placeholder": "Select a category",
+        "home": "Home",
+        "members": "Members"
+      },
       "error": {
         "undefined": {
           "title": "Clan Not Found",
@@ -56,6 +61,21 @@
           "score": "Loss Score"
         },
         "ratio": { "normal": "Ratio", "score": "Score Ratio" }
+      },
+      "membersPage": {
+        "no_data": "The members of this clan could not be retrieved. It is likely an invite-only clan.",
+        "leader": {
+          "title": { "singular": "Leader", "plural": "Leaders" },
+          "no_data": "This clan do not have leader"
+        },
+        "officer": {
+          "title": { "singular": "Officer", "plural": "Officers" },
+          "no_data": "This clan do not have officer"
+        },
+        "member": {
+          "title": { "singular": "Member", "plural": "Members" },
+          "no_data": "This clan do not have member"
+        }
       }
     },
     "map": {

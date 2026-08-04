@@ -2,6 +2,7 @@ const {
   SlashCommandBuilder,
   ContainerBuilder,
   ActionRowBuilder,
+  StringSelectMenuBuilder,
   ButtonBuilder,
   ButtonStyle,
   MessageFlags,
@@ -139,6 +140,31 @@ module.exports = {
           ),
         );
     }
+
+    container
+      .addSeparatorComponents((s) => s)
+      .addActionRowComponents(
+        new ActionRowBuilder().addComponents(
+          new StringSelectMenuBuilder()
+            .setCustomId(`clan-${tag}`)
+            .setPlaceholder(
+              translate(currentLang, "commands.clan.select.placeholder"),
+            )
+            .addOptions([
+              {
+                label: translate(currentLang, "commands.clan.select.home"),
+                value: "home",
+                emoji: "🛖",
+                default: true,
+              },
+              {
+                label: translate(currentLang, "commands.clan.select.members"),
+                value: "members",
+                emoji: "👥",
+              },
+            ]),
+        ),
+      );
 
     await interaction.reply({
       components: [container],

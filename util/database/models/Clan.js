@@ -7,6 +7,7 @@ const membersSchema = new mongoose.Schema({
     unique: true,
     index: true,
   },
+  username: { type: String },
   role: {
     type: String,
   },
@@ -35,6 +36,7 @@ const clanSchema = new mongoose.Schema({
   members: {
     type: [membersSchema],
   },
+  discordUrl: { type: String },
   memberCount: { type: Number },
   createdAt: {
     type: Date,

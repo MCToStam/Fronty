@@ -20,6 +20,11 @@
           }
         }
       },
+      "select": {
+        "placeholder": "Sélectionner une catégorie",
+        "home": "Acceuil",
+        "members": "Membres"
+      },
       "error": {
         "undefined": {
           "title": "Clan Introuvable",
@@ -56,6 +61,21 @@
           "score": "Score de Défaite"
         },
         "ratio": { "normal": "Ratio", "score": "Ratio des Scores" }
+      },
+      "membersPage": {
+        "no_data": "Les membres de ce clan n'ont pas pu être récupérés. Il s'agit sûrement d'un clan ouvert uniquement sur invitation.",
+        "leader": {
+          "title": { "singular": "Chef", "plural": "Chefs" },
+          "no_data": "Ce clan n'a pas de chef"
+        },
+        "officer": {
+          "title": { "singular": "Officier", "plural": "Officiers" },
+          "no_data": "Ce clan n'a pas d'officier"
+        },
+        "member": {
+          "title": { "singular": "Membre", "plural": "Membres" },
+          "no_data": "Ce clan n'a pas de membre"
+        }
       }
     },
     "map": {

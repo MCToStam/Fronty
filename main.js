@@ -2,7 +2,13 @@ if (Number(process.version.slice(1).split(".")[0]) < 19)
   throw new Error("Node 19.x is required. Update Node on your system.");
 require("dotenv").config({ quiet: true });
 
-const { Client, Collection, Partials, IntentsBitField } = require("discord.js");
+const {
+  Client,
+  Collection,
+  Partials,
+  IntentsBitField,
+  GatewayIntentBits,
+} = require("discord.js");
 const { readdirSync } = require("fs");
 const pathModule = require("path");
 const log = require("./util/module/log");
@@ -21,7 +27,7 @@ process.on("uncaughtExceptionMonitor", (err, origin) => {
 });
 
 const client = new Client({
-  intents: new IntentsBitField([]),
+  intents: new IntentsBitField([GatewayIntentBits.Guilds]),
   partials: [Partials.User, Partials.Channel, Partials.GuildMember],
 });
 

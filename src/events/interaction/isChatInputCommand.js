@@ -76,7 +76,7 @@ module.exports = async (client, interaction) => {
           .addSeparatorComponents((separator) => separator)
           .addTextDisplayComponents((textDisplay) =>
             textDisplay.setContent(
-              `## ❌ ${translate(currentLang, "container.cooldown.description")} <t:${expiredTimestamp}:R>.`,
+              `${translate(currentLang, "container.cooldown.description")} <t:${expiredTimestamp}:R>.`,
             ),
           );
 
