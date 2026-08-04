@@ -23,7 +23,7 @@ module.exports = async (client, guild) => {
       section
         .addTextDisplayComponents((textDisplay) =>
           textDisplay.setContent(
-            `${client.user.username} ${translate(currentLang, "container.invitation.join.description1")} ${client.guilds.cache.size} ${client.guilds.cache.size > 1 ? translate(currentLang, "container.invitation.guilds.plural") : translate(currentLang, "container.invitation.guilds.singular")}.\n\n> ${translate(currentLang, "container.invitation.name")} : ${escapedServerName}\n> Membre${guild.memberCount > 1 ? translate(currentLang, "container.invitation.members.plural") : translate(currentLang, "container.invitation.members.singular")} : ${guild.memberCount}\n> ${translate(currentLang, "container.invitation.owner")} : <@${guild.ownerId}>\n> ${translate(currentLang, "container.invitation.creationDate")} : <t:${creationTimestamp}:R>`,
+            `${client.user.username} ${translate(currentLang, "container.invitation.join.description1")} ${client.guilds.cache.size} ${client.guilds.cache.size > 1 ? translate(currentLang, "container.invitation.guilds.plural") : translate(currentLang, "container.invitation.guilds.singular")}.\n\n> ${translate(currentLang, "container.invitation.name")} : ${escapedServerName}\n> ${guild.memberCount > 1 ? translate(currentLang, "container.invitation.members.plural") : translate(currentLang, "container.invitation.members.singular")} : ${guild.memberCount}\n> ${translate(currentLang, "container.invitation.owner")} : <@${guild.ownerId}>\n> ${translate(currentLang, "container.invitation.creationDate")} : <t:${creationTimestamp}:R>`,
           ),
         )
         .setThumbnailAccessory((thumbnail) => thumbnail.setURL(serverIconURL)),
