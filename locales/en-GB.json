@@ -97,6 +97,23 @@
     "cooldown": {
       "title": "Cooldown",
       "description": "This command is currently on cooldown; you'll be able to use it again"
+    },
+    "invitation": {
+      "join": {
+        "title": "Guild Created",
+        "description1": "was invited by",
+        "description2": "and",
+        "description3": "now has"
+      },
+      "leave": {
+        "title": "Guild Deleted",
+        "description1": "leave a guild and now has"
+      },
+      "guilds": { "singular": "guild", "plural": "guilds" },
+      "name": "Name",
+      "members": { "singular": "Member", "plural": "Members" },
+      "owner": "Owner",
+      "creationDate": "Creation Date"
     }
   },
   "log": {

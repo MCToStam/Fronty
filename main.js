@@ -2,18 +2,11 @@ if (Number(process.version.slice(1).split(".")[0]) < 19)
   throw new Error("Node 19.x is required. Update Node on your system.");
 require("dotenv").config({ quiet: true });
 
-const {
-  Client,
-  Collection,
-  Partials,
-  GatewayIntentBits,
-  IntentsBitField,
-} = require("discord.js");
+const { Client, Collection, Partials, IntentsBitField } = require("discord.js");
 const { readdirSync } = require("fs");
 const pathModule = require("path");
 const log = require("./util/module/log");
 const { connectMongo } = require("./util/database/index");
-const { ClusterClient, getInfo } = require("discord-hybrid-sharding");
 
 process.on("unhandledRejection", (reason, p) => {
   log(`[antiCrash] Unhandled Rejection: ${reason}`, "error", "red");
@@ -28,18 +21,9 @@ process.on("uncaughtExceptionMonitor", (err, origin) => {
 });
 
 const client = new Client({
-  shards: getInfo().SHARD_LIST,
-  shardCount: getInfo().TOTAL_SHARDS,
   intents: new IntentsBitField([]),
   partials: [Partials.User, Partials.Channel, Partials.GuildMember],
 });
-
-client.cluster = new ClusterClient(client);
-
-if (process.env.CROSS_HOST === "true") {
-  const { Shard } = require("discord-cross-hosting");
-  client.machine = new Shard(client.cluster);
-}
 
 client.botLaunch = Date.now();
 client.cooldowns = new Collection();
@@ -56,7 +40,7 @@ client.container = {
 };
 
 const shardTag = () =>
-  `Cluster #${getInfo().CLUSTER} | Shards ${getInfo().SHARD_LIST.join(",")}`;
+  `Shard(s) ${client.shard ? client.shard.ids.join(",") : "0"}`;
 
 const init = async () => {
   async function load(type, dirPath) {

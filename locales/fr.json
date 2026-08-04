@@ -97,6 +97,23 @@
     "cooldown": {
       "title": "Cooldown",
       "description": "Cette commande est actuellement sous cooldown, tu pourras la réutiliser"
+    },
+    "invitation": {
+      "join": {
+        "title": "Serveur Invité",
+        "description1": "a été invité par",
+        "description2": "et",
+        "description3": "a maintenant"
+      },
+      "leave": {
+        "title": "Serveur Quitté",
+        "description1": "a quitté un serveur et a maintenant"
+      },
+      "guilds": { "singular": "serveur", "plural": "serveurs" },
+      "name": "Nom",
+      "members": { "singular": "Membre", "plural": "Membres" },
+      "owner": "Propriétaire",
+      "creationDate": "Date de création"
     }
   },
   "log": {

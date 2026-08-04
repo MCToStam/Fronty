@@ -34,7 +34,6 @@ module.exports = async (client, interaction) => {
     return interaction.reply({
       components: [disabledContainer],
       flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-      allowedMentions: { parse: [] },
     });
   }
 
@@ -74,7 +73,6 @@ module.exports = async (client, interaction) => {
         return interaction.reply({
           components: [cooldownContainer],
           flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-          allowedMentions: { parse: [] },
         });
       }
     }
@@ -119,7 +117,6 @@ module.exports = async (client, interaction) => {
         await interaction.reply({
           components: [errorContainer],
           flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-          allowedMentions: { parse: [] },
         });
       }
     } catch (e) {}
@@ -128,6 +125,8 @@ module.exports = async (client, interaction) => {
     const channel = await client.channels.fetch(config.log_channels.error, {
       allowUnknownGuild: true,
     });
+
+    if (!channel) return;
 
     const errorLogContainer = new ContainerBuilder()
       .setAccentColor(config.colors.error)
@@ -150,8 +149,7 @@ module.exports = async (client, interaction) => {
 
     await channel.send({
       components: [errorLogContainer],
-      flags: 32768,
-      allowedMentions: { parse: [] },
+      flags: MessageFlags.IsComponentsV2,
     });
   }
 

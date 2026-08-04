@@ -119,7 +119,6 @@ module.exports = {
 
         return interaction.editReply({
           components: [goodContainer],
-          allowedMentions: { parse: [] },
           flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
         });
       } else {
@@ -142,7 +141,6 @@ module.exports = {
 
             return interaction.editReply({
               components: [goodContainer],
-              allowedMentions: { parse: [] },
               flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
             });
           })
@@ -169,7 +167,6 @@ module.exports = {
 
             return interaction.editReply({
               components: [goodContainer],
-              allowedMentions: { parse: [] },
               flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
             });
           })
@@ -194,7 +191,6 @@ module.exports = {
 
             return interaction.editReply({
               components: [goodContainer],
-              allowedMentions: { parse: [] },
               flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
             });
           })
@@ -218,7 +214,6 @@ module.exports = {
 
         return interaction.editReply({
           components: [erreurContainer],
-          allowedMentions: { parse: [] },
           flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
         });
       }
@@ -244,7 +239,6 @@ module.exports = {
 
       return interaction.editReply({
         components: [goodContainer],
-        allowedMentions: { parse: [] },
         flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
       });
     }

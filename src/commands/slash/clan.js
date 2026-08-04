@@ -44,10 +44,6 @@ module.exports = {
 
     const tag = interaction.options.getString("tag").toUpperCase();
 
-    await interaction.deferReply({
-      flags: MessageFlags.IsComponentsV2,
-    });
-
     const clan = await Clan.findOne({ tag: tag });
 
     if (!clan) {
@@ -65,7 +61,7 @@ module.exports = {
           ),
         );
 
-      return await interaction.editReply({
+      return await interaction.reply({
         components: [container],
         flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
       });
@@ -144,7 +140,7 @@ module.exports = {
         );
     }
 
-    await interaction.editReply({
+    await interaction.reply({
       components: [container],
       flags: MessageFlags.IsComponentsV2,
     });
