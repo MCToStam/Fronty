@@ -16,6 +16,40 @@ const membersSchema = new mongoose.Schema({
   },
 });
 
+const statsSchema = new mongoose.Schema({
+  available: {
+    type: Boolean,
+    default: false,
+  },
+  games: {
+    type: Number,
+  },
+  wins: {
+    type: Number,
+  },
+  losses: {
+    type: Number,
+  },
+  playerSessions: {
+    type: Number,
+  },
+  weightedWins: {
+    type: Number,
+  },
+  weightedLosses: {
+    type: Number,
+  },
+  weightedWLRatio: {
+    type: Number,
+  },
+  start: {
+    type: Date,
+  },
+  end: {
+    type: Date,
+  },
+});
+
 const clanSchema = new mongoose.Schema({
   tag: {
     type: String,
@@ -40,6 +74,9 @@ const clanSchema = new mongoose.Schema({
   memberCount: { type: Number },
   createdAt: {
     type: Date,
+  },
+  stats: {
+    type: statsSchema,
   },
 });
 

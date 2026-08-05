@@ -13,7 +13,7 @@ module.exports = async (client, interaction) => {
   const btn = client.container.buttons.get(interaction.customId.split("-")[0]);
   if (!btn) return;
 
-  const currentLang = "en-GB";
+  const currentLang = config.defaultLanguage;
 
   const originalMessage = interaction?.message?.reference
     ? await interaction.channel.messages.fetch(
@@ -63,7 +63,7 @@ module.exports = async (client, interaction) => {
       .addActionRowComponents(
         new ActionRowBuilder().addComponents(
           new ButtonBuilder()
-            .setURL("https://discord.gg/tFkb9nYSd8")
+            .setURL(config.supportServer)
             .setEmoji("1307452239052279858")
             .setLabel(translate(currentLang, "container.error.support_server"))
             .setStyle(ButtonStyle.Link),

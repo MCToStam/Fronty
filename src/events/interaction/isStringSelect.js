@@ -15,7 +15,7 @@ module.exports = async (client, interaction) => {
   );
   if (!stringSelect) return;
 
-  const currentLang = "en-GB";
+  const currentLang = config.defaultLanguage;
 
   if (
     interaction.message?.interaction &&
@@ -61,7 +61,7 @@ module.exports = async (client, interaction) => {
       .addActionRowComponents(
         new ActionRowBuilder().addComponents(
           new ButtonBuilder()
-            .setURL("https://discord.gg/tFkb9nYSd8")
+            .setURL(config.supportServer)
             .setEmoji("1307452239052279858")
             .setLabel(translate(currentLang, "container.error.support_server"))
             .setStyle(ButtonStyle.Link),

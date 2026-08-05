@@ -1,6 +1,6 @@
-const { OpenFrontAPI } = require("./openfront-api");
-const Clan = require("./database/models/Clan");
-const log = require("./module/log");
+const { OpenFrontAPI } = require("../util/openfront-api");
+const Clan = require("../util/database/models/Clan");
+const log = require("../util/module/log");
 
 async function getAllClans() {
   log("Retrieving clans...", "TASK", "magentaBright");
@@ -108,8 +108,12 @@ async function saveClan(clan, members = []) {
   );
 }
 
-async function processClan(clan) {
+async function processClan(clanTag) {
   try {
+    const clan = await OpenFrontAPI(
+      `https://api.openfront.io/clans/${clanTag}`,
+    );
+
     let members = [];
 
     if (clan.isOpen) {
@@ -117,20 +121,76 @@ async function processClan(clan) {
     }
 
     await saveClan(clan, formatMembers(members));
-  } catch (error) {
-    console.error(`Erreur clan ${clan.tag}`, error.message);
-    await saveClan(clan, []);
+  } catch (err) {
+    log(`Error with clan ${clanTag} : ${err}`, "error", "red");
   }
 }
 
 async function syncClans() {
   const clans = await getAllClans();
 
+  const apiClanTags = clans.map((clan) => clan.tag);
+
+  await Clan.deleteMany({
+    tag: { $nin: apiClanTags },
+  });
+
   for (const clan of clans) {
-    await processClan(clan);
+    await processClan(clan.tag);
   }
 
   log("Clan synchronization complete", "TASK", "magentaBright");
 }
 
-module.exports = syncClans;
+async function syncClanStats() {
+  log("Retrieving clan leaderboard...", "TASK", "magentaBright");
+
+  const data = await OpenFrontAPI(
+    "https://api.openfront.io/public/clans/leaderboard",
+  );
+
+  const statsByClan = new Map(
+    data.clans.map((clan) => [
+      clan.clanTag,
+      {
+        games: clan.games,
+        wins: clan.wins,
+        losses: clan.losses,
+        playerSessions: clan.playerSessions,
+        weightedWins: clan.weightedWins,
+        weightedLosses: clan.weightedLosses,
+        weightedWLRatio: clan.weightedWLRatio,
+        start: new Date(data.start),
+        end: new Date(data.end),
+      },
+    ]),
+  );
+
+  const clans = await Clan.find();
+
+  for (const clan of clans) {
+    const stats = statsByClan.get(clan.tag);
+
+    await Clan.updateOne(
+      {
+        tag: clan.tag,
+      },
+      {
+        $set: {
+          stats: stats
+            ? {
+                available: true,
+                ...stats,
+              }
+            : {
+                available: false,
+              },
+        },
+      },
+    );
+  }
+
+  log("Clan stats synchronization complete", "TASK", "magentaBright");
+}
+
+module.exports = { syncClans, syncClanStats };

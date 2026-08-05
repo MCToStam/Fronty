@@ -1,5 +1,7 @@
 class config {
   constructor() {
+    this.defaultLanguage = "en-GB";
+    this.supportServer = "https://discord.gg/tFkb9nYSd8";
     this.colors = {
       error: 0xff0000,
       success: 0x3fff00,

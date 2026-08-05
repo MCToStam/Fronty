@@ -1,10 +1,11 @@
-const fs = require("fs");
-const path = require("path");
-
+const fs = require("node:fs");
+const path = require("node:path");
+const log = require("../util/module/log");
+const config = require("../config");
 const Config = require("../util/database/models/Config");
 
 const LOCALES_DIR = path.join(__dirname, "../locales");
-const DEFAULT_LANG = "en-GB";
+const DEFAULT_LANG = config.defaultLanguage;
 
 const locales = new Map();
 
@@ -54,20 +55,14 @@ async function getGuildInfo(clientLanguage, guild) {
     return guildInfoCache.get(guildId);
   }
 
-  let config = null;
-
-  try {
-    config = await Config.findOne({ guildId }).lean();
-  } catch (err) {
-    console.error("[guildInfo] Erreur lecture Config:", err);
-  }
+  const config = await Config.findOne({ guildId }).lean();
 
   const info = {
     language: config?.language || null,
   };
 
-  if (!info.language && (clientLanguage || guild?.preferredLocale)) {
-    const base = clientLanguage || guild.preferredLocale.split("-")[0];
+  if (!info.language && (guild?.preferredLocale || clientLanguage)) {
+    const base = guild.preferredLocale.split("-")[0] || clientLanguage;
     if (locales.has(base)) info.language = base;
   }
 

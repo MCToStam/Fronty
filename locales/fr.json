@@ -31,7 +31,6 @@
           "description": "Ce clan n'existe pas ou n'a pas été recensé dans nos données."
         }
       },
-      "rank": "Rang",
       "description": {
         "title": "Description",
         "nothing": "Aucune description spécifiée"
@@ -119,6 +118,11 @@
       "description": "Cette commande est actuellement sous cooldown, tu pourras la réutiliser"
     },
     "invitation": {
+      "help": {
+        "title": "Bien Démarrer",
+        "description": "Merci de m'avoir ➕ **ajouté** sur ton serveur Discord !\n\nPour bien commencer, utilise la commande **`/config`** 🛠️  \n👉 C'est **LA commande principale** qui te permettra de configurer facilement le robot\n\n### 📌 Commandes utiles pour débuter :\n``/clan`` → Affiche les informations d'un clan\n\n💡 Le plus simple reste de tester les commandes directement !\n\nSi tu as besoin d'aide ou des idées à proposer, rejoins le serveur support 👇",
+        "support_server": "Serveur Support"
+      },
       "join": {
         "title": "Serveur Invité",
         "description1": "a été invité par",

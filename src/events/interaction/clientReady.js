@@ -3,7 +3,7 @@ const cron = require("node-cron");
 const log = require("../../../util/module/log");
 
 const updateMaps = require("../../../util/updateMaps");
-const syncClans = require("../../../util/syncClans");
+const { syncClans, syncClanStats } = require("../../../util/syncClans");
 
 const evalFn = (c) => ({
   guilds: c.guilds.cache.size,
@@ -66,7 +66,26 @@ module.exports = async (client) => {
       "0 0 * * *",
       async () => {
         await updateMaps();
+      },
+      {
+        timezone: "Europe/Paris",
+      },
+    );
+
+    cron.schedule(
+      "0 0 * * *",
+      async () => {
         await syncClans();
+      },
+      {
+        timezone: "Europe/Paris",
+      },
+    );
+
+    cron.schedule(
+      "0 * * * *",
+      async () => {
+        await syncClanStats();
       },
       {
         timezone: "Europe/Paris",

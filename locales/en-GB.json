@@ -31,7 +31,6 @@
           "description": "This clan does not exist or has not been recorded in our data."
         }
       },
-      "rank": "Rank",
       "description": {
         "title": "Description",
         "nothing": "No description specified"
@@ -119,6 +118,11 @@
       "description": "This command is currently on cooldown; you'll be able to use it again"
     },
     "invitation": {
+      "help": {
+        "title": "Getting Started",
+        "description": "Thanks for ➕ **adding** me to your Discord server !\n\nTo get started, use the **`/config`** 🛠️  \n👉 It’s **THE main command** that lets you easily configure the bot\n\n### 📌 Useful commands to get started :\n``/clan`` → Displays clan information\n\n💡 The easiest way is to just try out the commands yourself !\n\nIf you need help or have ideas to share, join the support server 👇",
+        "support_server": "Support Server"
+      },
       "join": {
         "title": "Guild Created",
         "description1": "was invited by",

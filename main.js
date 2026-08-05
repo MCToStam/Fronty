@@ -15,15 +15,17 @@ const log = require("./util/module/log");
 const { connectMongo } = require("./util/database/index");
 
 process.on("unhandledRejection", (reason, p) => {
-  log(`[antiCrash] Unhandled Rejection: ${reason}`, "error", "red");
-  console.log(reason, p);
+  log(`[antiCrash] Unhandled Rejection: ${reason} ${p}`, "error", "red");
 });
 process.on("uncaughtException", (err) => {
   log(`[antiCrash] Uncaught Exception: ${err.stack}`, "error", "red");
 });
 process.on("uncaughtExceptionMonitor", (err, origin) => {
-  log(`[antiCrash] Uncaught Exception (MONITOR): ${err.stack}`, "error", "red");
-  console.log(origin);
+  log(
+    `[antiCrash] Uncaught Exception (MONITOR): ${err.stack} ${origin}`,
+    "error",
+    "red",
+  );
 });
 
 const client = new Client({
@@ -105,7 +107,7 @@ const init = async () => {
     const slashCmd = cmd.filter((c)=> c.data.name === "cmd")
     await guildCmds
       .set(slashCmd.map((c) => c.data))
-      .catch((e) => console.log(e));
+      .catch((e) => log(e`, "error", "red"));
   });*/
 };
 

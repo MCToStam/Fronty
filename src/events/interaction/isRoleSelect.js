@@ -15,7 +15,7 @@ module.exports = async (client, interaction) => {
   );
   if (!roleSelect) return;
 
-  const currentLang = "en-GB";
+  const currentLang = config.defaultLanguage;
 
   if (interaction.user.id !== interaction.message.interaction.user.id) {
     const permissionContainer = new ContainerBuilder()
@@ -58,7 +58,7 @@ module.exports = async (client, interaction) => {
       .addActionRowComponents(
         new ActionRowBuilder().addComponents(
           new ButtonBuilder()
-            .setURL("https://discord.gg/tFkb9nYSd8")
+            .setURL(config.supportServer)
             .setEmoji("1307452239052279858")
             .setLabel(translate(currentLang, "container.error.support_server"))
             .setStyle(ButtonStyle.Link),

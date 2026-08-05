@@ -68,15 +68,9 @@ module.exports = {
       });
     }
 
-    const top = await OpenFrontAPI(
-      "https://api.openfront.io/public/clans/leaderboard",
-    );
-
     const creationTimestamp = Math.floor(
       new Date(clan.createdAt).getTime() / 1000,
     );
-
-    const rank = top.clans.findIndex((c) => c.clanTag === clan.tag) + 1;
 
     const container = new ContainerBuilder()
       .setAccentColor(config.colors.normal)
@@ -86,22 +80,21 @@ module.exports = {
       .addSeparatorComponents((s) => s)
       .addTextDisplayComponents((t) =>
         t.setContent(
-          `${rank ? `**🏆 ${translate(currentLang, "commands.clan.rank")} :** #${rank}\n` : ""}**📌 ${translate(currentLang, "commands.clan.description.title")} : ** ${clan.description || translate(currentLang, "commands.clan.description.nothing")}\n**👥 ${clan.memberCount > 1 ? translate(currentLang, "commands.clan.members.plural") : translate(currentLang, "commands.clan.members.singular")} :** ${clan.memberCount.toLocaleString()}\n**🔓 ${translate(currentLang, "commands.clan.status.title")}** : ${clan.isOpen ? translate(currentLang, "commands.clan.status.open") : translate(currentLang, "commands.clan.status.close")}\n**📅 ${translate(currentLang, "commands.clan.creation")} :** <t:${creationTimestamp}:F> • <t:${creationTimestamp}:R>`,
+          `**📌 ${translate(currentLang, "commands.clan.description.title")} : ** ${clan.description || translate(currentLang, "commands.clan.description.nothing")}\n**👥 ${clan.memberCount > 1 ? translate(currentLang, "commands.clan.members.plural") : translate(currentLang, "commands.clan.members.singular")} :** ${clan.memberCount.toLocaleString()}\n**🔓 ${translate(currentLang, "commands.clan.status.title")}** : ${clan.isOpen ? translate(currentLang, "commands.clan.status.open") : translate(currentLang, "commands.clan.status.close")}\n**📅 ${translate(currentLang, "commands.clan.creation")} :** <t:${creationTimestamp}:F> • <t:${creationTimestamp}:R>`,
         ),
       );
 
-    const clanTop = top.clans[rank - 1];
-    if (clanTop) {
+    if (clan.stats) {
       container
         .addSeparatorComponents((s) => s)
         .addTextDisplayComponents((t) =>
           t.setContent(
-            `🎮 **${clanTop.games > 1 ? translate(currentLang, "commands.clan.stats.games.plural") : translate(currentLang, "commands.clan.stats.games.singular")} :** ${clanTop.games.toLocaleString()}\n🏆 **${clanTop.wins > 1 ? translate(currentLang, "commands.clan.stats.wins.plural") : translate(currentLang, "commands.clan.stats.wins.singular")} :** ${clanTop.wins.toLocaleString()}\n💥 **${clanTop.losses > 1 ? translate(currentLang, "commands.clan.stats.losses.plural") : translate(currentLang, "commands.clan.stats.losses.singular")} :** ${clanTop.losses.toLocaleString()}\n♾️ **${translate(currentLang, "commands.clan.stats.ratio.normal")} :** ${(clanTop.wins / clanTop.losses).toLocaleString()}`,
+            `🎮 **${clan.stats.games > 1 ? translate(currentLang, "commands.clan.stats.games.plural") : translate(currentLang, "commands.clan.stats.games.singular")} :** ${clan.stats.games.toLocaleString()}\n🏆 **${clan.stats.wins > 1 ? translate(currentLang, "commands.clan.stats.wins.plural") : translate(currentLang, "commands.clan.stats.wins.singular")} :** ${clan.stats.wins.toLocaleString()}\n💥 **${clan.stats.losses > 1 ? translate(currentLang, "commands.clan.stats.losses.plural") : translate(currentLang, "commands.clan.stats.losses.singular")} :** ${clan.stats.losses.toLocaleString()}\n♾️ **${translate(currentLang, "commands.clan.stats.ratio.normal")} :** ${(clan.stats.wins / clan.stats.losses).toLocaleString()}`,
           ),
         )
         .addTextDisplayComponents((t) =>
           t.setContent(
-            `🏆 **${translate(currentLang, "commands.clan.stats.wins.score")} :** ${clanTop.weightedWins.toLocaleString()}\n💥 **${translate(currentLang, "commands.clan.stats.losses.score")} :** ${clanTop.weightedLosses.toLocaleString()}\n♾️ **${translate(currentLang, "commands.clan.stats.ratio.score")} :** ${clanTop.weightedWLRatio.toLocaleString()}`,
+            `🏆 **${translate(currentLang, "commands.clan.stats.wins.score")} :** ${clan.stats.weightedWins.toLocaleString()}\n💥 **${translate(currentLang, "commands.clan.stats.losses.score")} :** ${clan.stats.weightedLosses.toLocaleString()}\n♾️ **${translate(currentLang, "commands.clan.stats.ratio.score")} :** ${clan.stats.weightedWLRatio.toLocaleString()}`,
           ),
         );
     }

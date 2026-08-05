@@ -19,12 +19,12 @@ async function connectMongo() {
     cached.promise = mongoose
       .connect(process.env.MONGO_URI)
       .then((mongooseInstance) => {
-        log("MongoDB est correctement connecté", "READY", "green");
+        log("MongoDB is successfully connected", "READY", "green");
         return mongooseInstance;
       })
       .catch((err) => {
         cached.promise = null;
-        log(`Erreur lors de la connexion MongoDB : ${err}`, "ERROR", "red");
+        log(`Error connecting to MongoDB : ${err}`, "error", "red");
         throw err;
       });
   }

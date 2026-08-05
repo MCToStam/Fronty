@@ -3,7 +3,7 @@ const config = require("../../../config");
 const { translate } = require("../../../util/i18n");
 
 module.exports = async (client, guild) => {
-  const currentLang = "en-GB";
+  const currentLang = config.defaultLanguage;
 
   const creationTimestamp = Math.floor(guild.createdTimestamp / 1000);
   const escapedServerName = guild.name.replace(/_/g, "\\_");
