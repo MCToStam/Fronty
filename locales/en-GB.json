@@ -97,6 +97,39 @@
       "size": "Dimension",
       "nation": { "plural": "Nations", "singular": "Nation" },
       "category": { "plural": "Categories", "singular": "Category" }
+    },
+    "top": {
+      "data": {
+        "name": "top",
+        "description": "Displays the OpenFront ranking",
+        "subcommands": {
+          "clan": {
+            "name": "clan",
+            "description": "Displays the clan rankings",
+            "options": {
+              "type": {
+                "name": "type",
+                "description": "Type of ranking to display",
+                "choices": {
+                  "createdAt": "Creation Date",
+                  "memberCount": "Member Count",
+                  "stats": {
+                    "games": "Game Played",
+                    "wins": "Game Won",
+                    "losses": "Game Lost",
+                    "weightedWins": "Win Score",
+                    "weightedLosses": "Loss Score",
+                    "weightedWLRatio": "Score Ratio"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "top": "Top",
+        "no_data": "No data available for this specific type of ranking",
+        "page": "Page"
+      }
     }
   },
   "container": {

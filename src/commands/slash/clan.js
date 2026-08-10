@@ -43,7 +43,9 @@ module.exports = {
     const guildInfo = await getGuildInfo(interaction.locale, interaction.guild);
     const currentLang = guildInfo.language;
 
-    const tag = interaction.options.getString("tag").toUpperCase();
+    const tag = interaction.options
+      .getString(translate("en", "commands.clan.data.options.tag.name"))
+      .toUpperCase();
 
     const clan = await Clan.findOne({ tag: tag });
 

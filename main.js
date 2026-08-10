@@ -74,7 +74,7 @@ const init = async () => {
   }
 
   await connectMongo();
-  log(`✅ [${shardTag()}] Connexion MongoDB établie`, "READY", "gray");
+  log(`✅ [${shardTag()}] MongoDB connection established`, "READY", "gray");
 
   const loaders = [
     ["slashCmds", "./src/commands/slash"],
@@ -113,7 +113,7 @@ const init = async () => {
 
 init().catch((err) => {
   log(
-    `❌ [${shardTag()}] Erreur fatale à l'initialisation: ${err.stack}`,
+    `❌ [${shardTag()}] Fatal initialization error : ${err.stack}`,
     "error",
     "red",
   );

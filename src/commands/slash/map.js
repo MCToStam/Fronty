@@ -38,57 +38,73 @@ module.exports = {
     ),
 
   async execute(client, interaction, config) {
-    const guildInfo = await getGuildInfo(interaction.locale, interaction.guild);
-    const currentLang = guildInfo.language;
+    try {
+      const guildInfo = await getGuildInfo(
+        interaction.locale,
+        interaction.guild,
+      );
+      const currentLang = guildInfo.language;
 
-    const name = interaction.options.getString("name");
-
-    const mapInfo = await Map.findOne({ id: name });
-
-    if (!mapInfo) {
-      const errorContainer = new ContainerBuilder()
-        .setAccentColor(config.colors.error)
-        .addTextDisplayComponents((textDisplay) =>
-          textDisplay.setContent(
-            `## ❌ ${translate(currentLang, "commands.map.error.undefined.title")}`,
-          ),
-        )
-        .addSeparatorComponents((separator) => separator)
-        .addTextDisplayComponents((textDisplay) =>
-          textDisplay.setContent(
-            translate(currentLang, "commands.map.error.undefined.description"),
-          ),
-        );
-
-      return await interaction.editReply({
-        components: [container],
-        flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-      });
-    }
-
-    const container = new ContainerBuilder()
-      .setAccentColor(config.colors.normal)
-      .addTextDisplayComponents((t) =>
-        t.setContent(
-          `## 🗺️ ${mapInfo.translations.get(currentLang) || mapInfo.id}`,
-        ),
-      )
-      .addSeparatorComponents((s) => s)
-      .addSectionComponents((section) =>
-        section
-          .addTextDisplayComponents((textDisplay) =>
-            textDisplay.setContent(
-              `**📁 ${mapInfo.categories.length > 1 ? translate(currentLang, "commands.map.category.plural") : translate(currentLang, "commands.map.category.singular")} :** ${mapInfo.categories.join(", ")}\n**✖️ ${translate(currentLang, "commands.map.size")} :** ${mapInfo.map.width}x${mapInfo.map.height}\n**🏳️ ${mapInfo.nations.length > 1 ? translate(currentLang, "commands.map.nation.plural") : translate(currentLang, "commands.map.nation.singular")} :** ${mapInfo.nations.length}`,
-            ),
-          )
-          .setThumbnailAccessory((thumbnail) =>
-            thumbnail.setURL(mapInfo.thumbnail),
-          ),
+      const name = interaction.options.getString(
+        translate("en", "commands.map.data.options.name.name"),
       );
 
-    await interaction.reply({
-      components: [container],
-      flags: MessageFlags.IsComponentsV2,
-    });
+      const mapInfo = await Map.findOne({ id: name });
+
+      if (!mapInfo) {
+        const errorContainer = new ContainerBuilder()
+          .setAccentColor(config.colors.error)
+          .addTextDisplayComponents((textDisplay) =>
+            textDisplay.setContent(
+              `## ❌ ${translate(currentLang, "commands.map.error.undefined.title")}`,
+            ),
+          )
+          .addSeparatorComponents((separator) => separator)
+          .addTextDisplayComponents((textDisplay) =>
+            textDisplay.setContent(
+              translate(
+                currentLang,
+                "commands.map.error.undefined.description",
+              ),
+            ),
+          );
+
+        return await interaction.editReply({
+          components: [container],
+          flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+        });
+      }
+
+      console.log(mapInfo.categories.get(currentLang));
+      console.log(currentLang);
+      console.log(mapInfo.categories);
+
+      const container = new ContainerBuilder()
+        .setAccentColor(config.colors.normal)
+        .addTextDisplayComponents((t) =>
+          t.setContent(
+            `## 🗺️ ${mapInfo.translations.get(currentLang) || mapInfo.id}`,
+          ),
+        )
+        .addSeparatorComponents((s) => s)
+        .addSectionComponents((section) =>
+          section
+            .addTextDisplayComponents((textDisplay) =>
+              textDisplay.setContent(
+                `**📁 ${mapInfo.categories.length > 1 ? translate(currentLang, "commands.map.category.plural") : translate(currentLang, "commands.map.category.singular")} :** ${mapInfo.categories.get(currentLang)}\n**✖️ ${translate(currentLang, "commands.map.size")} :** ${mapInfo.map.width}x${mapInfo.map.height}\n**🏳️ ${mapInfo.nations.length > 1 ? translate(currentLang, "commands.map.nation.plural") : translate(currentLang, "commands.map.nation.singular")} :** ${mapInfo.nations.length}`,
+              ),
+            )
+            .setThumbnailAccessory((thumbnail) =>
+              thumbnail.setURL(mapInfo.thumbnail),
+            ),
+        );
+
+      await interaction.reply({
+        components: [container],
+        flags: MessageFlags.IsComponentsV2,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   },
 };

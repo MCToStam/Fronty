@@ -97,6 +97,39 @@
         "nation": { "plural": "Nations", "singular": "Nation" },
         "category": { "plural": "Catégories", "singular": "Catégorie" }
       }
+    },
+    "top": {
+      "data": {
+        "name": "top",
+        "description": "Affiche le classement OpenFront",
+        "subcommands": {
+          "clan": {
+            "name": "clan",
+            "description": "Affiche le classement des clans",
+            "options": {
+              "type": {
+                "name": "type",
+                "description": "Type de classement à afficher",
+                "choices": {
+                  "createdAt": "Date de Création",
+                  "memberCount": "Nombre de Membre",
+                  "stats": {
+                    "games": "Partie Jouée",
+                    "wins": "Partie Gagnée",
+                    "losses": "Perdu Perdue",
+                    "weightedWins": "Score de Victoire",
+                    "weightedLosses": "Score de Défaite",
+                    "weightedWLRatio": "Ratio des Scores"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "top": "Top",
+        "no_data": "Aucune donnée disponible pour ce type de classement précis",
+        "page": "Page"
+      }
     }
   },
   "container": {

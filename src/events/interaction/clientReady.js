@@ -4,6 +4,7 @@ const log = require("../../../util/module/log");
 
 const updateMaps = require("../../../util/updateMaps");
 const { syncClans, syncClanStats } = require("../../../util/syncClans");
+const { syncPlayers } = require("../../../util/syncPlayers");
 
 const evalFn = (c) => ({
   guilds: c.guilds.cache.size,
@@ -76,6 +77,7 @@ module.exports = async (client) => {
       "0 0 * * *",
       async () => {
         await syncClans();
+        await syncPlayers();
       },
       {
         timezone: "Europe/Paris",
