@@ -124,12 +124,25 @@
                 }
               }
             }
+          },
+          "player": {
+            "name": "player",
+            "description": "Displays the player rankings",
+            "options": {
+              "type": {
+                "name": "type",
+                "description": "Type of ranking to display",
+                "choices": {
+                  "createdAt": "Creation Date"
+                }
+              }
+            }
           }
-        },
-        "top": "Top",
-        "no_data": "No data available for this specific type of ranking",
-        "page": "Page"
-      }
+        }
+      },
+      "top": "Top",
+      "no_data": "No data available for this specific type of ranking",
+      "page": "Page"
     }
   },
   "container": {

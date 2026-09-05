@@ -23,24 +23,31 @@ const statsSchema = new mongoose.Schema({
   },
   games: {
     type: Number,
+    index: true,
   },
   wins: {
     type: Number,
+    index: true,
   },
   losses: {
     type: Number,
+    index: true,
   },
   playerSessions: {
     type: Number,
+    index: true,
   },
   weightedWins: {
     type: Number,
+    index: true,
   },
   weightedLosses: {
     type: Number,
+    index: true,
   },
   weightedWLRatio: {
     type: Number,
+    index: true,
   },
   start: {
     type: Date,
@@ -71,9 +78,10 @@ const clanSchema = new mongoose.Schema({
     type: [membersSchema],
   },
   discordUrl: { type: String },
-  memberCount: { type: Number },
+  memberCount: { type: Number, index: true },
   createdAt: {
     type: Date,
+    index: true,
   },
   stats: {
     type: statsSchema,

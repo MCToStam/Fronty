@@ -14,9 +14,11 @@ const { getGuildInfo, translate } = require("../../../util/i18n");
 module.exports = async (client, guild) => {
   const currentLang = config.defaultLanguage;
 
-  const channel = client.channels.cache.get(config.log_channels.invitationBot, {
-    allowUnknownGuild: true,
-  });
+  const channel = client.channels.cache
+    .get(config.log_channels.invitationBot, {
+      allowUnknownGuild: true,
+    })
+    .catch(() => null);
 
   if (channel) {
     let inviter = null;

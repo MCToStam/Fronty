@@ -36,9 +36,11 @@ module.exports = async (client, guild) => {
     );
   }
 
-  const channel = client.channels.cache.get(config.log_channels.invitationBot, {
-    allowUnknownGuild: true,
-  });
+  const channel = client.channels.cache
+    .get(config.log_channels.invitationBot, {
+      allowUnknownGuild: true,
+    })
+    .catch(() => null);
 
   if (!channel) return;
 

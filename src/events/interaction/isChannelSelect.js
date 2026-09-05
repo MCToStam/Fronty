@@ -80,9 +80,11 @@ module.exports = async (client, interaction) => {
     } catch (e) {}
     log(e, "error", "red");
 
-    const channel = await client.channels.fetch(config.log_channels.error, {
-      allowUnknownGuild: true,
-    });
+    const channel = await client.channels
+      .fetch(config.log_channels.error, {
+        allowUnknownGuild: true,
+      })
+      .catch(() => null);
 
     if (!channel) return;
 
@@ -111,9 +113,11 @@ module.exports = async (client, interaction) => {
     });
   }
 
-  const channel = await client.channels.fetch(config.log_channels.selectMenu, {
-    allowUnknownGuild: true,
-  });
+  const channel = await client.channels
+    .fetch(config.log_channels.selectMenu, {
+      allowUnknownGuild: true,
+    })
+    .catch(() => null);
 
   if (!channel) return;
 

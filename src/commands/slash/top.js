@@ -12,6 +12,7 @@ const {
   translate,
 } = require("../../../util/i18n");
 const Clan = require("../../../util/database/models/Clan");
+const Player = require("../../../util/database/models/Player");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -141,6 +142,55 @@ module.exports = {
               },
             ),
         ),
+    )
+    .addSubcommand((sub) =>
+      sub
+        .setName(translate("en", "commands.top.data.subcommands.player.name"))
+        .setNameLocalizations(
+          getLocalization("commands.top.data.subcommands.player.name"),
+        )
+        .setDescription(
+          translate("en", "commands.top.data.subcommands.player.description"),
+        )
+        .setDescriptionLocalizations(
+          getLocalization("commands.top.data.player.description"),
+        )
+        .addStringOption((o) =>
+          o
+            .setName(
+              translate(
+                "en",
+                "commands.top.data.subcommands.player.options.type.name",
+              ),
+            )
+            .setNameLocalizations(
+              getLocalization(
+                "commands.top.data.subcommands.player.options.type.name",
+              ),
+            )
+            .setDescription(
+              translate(
+                "en",
+                "commands.top.data.subcommands.player.options.type.description",
+              ),
+            )
+            .setDescriptionLocalizations(
+              getLocalization(
+                "commands.top.data.subcommands.player.options.type.description",
+              ),
+            )
+            .setRequired(true)
+            .addChoices({
+              name: translate(
+                "en",
+                "commands.top.data.subcommands.player.options.type.choices.createdAt",
+              ),
+              name_localizations: getLocalization(
+                "commands.top.data.subcommands.player.options.type.choices.createdAt",
+              ),
+              value: "createdAt",
+            }),
+        ),
     ),
 
   async execute(client, interaction, config) {
@@ -153,64 +203,70 @@ module.exports = {
     );
 
     const topLabels = {
-      memberCount: {
-        order: "desc",
-        formatter: (v) => `${v.toLocaleString()}`,
-      },
-      createdAt: {
-        order: "asc",
-        formatter: (v) => {
-          const timestamp = Math.floor(new Date(v).getTime() / 1000);
+      clan: {
+        memberCount: {
+          order: "desc",
+          formatter: (v) => `${v.toLocaleString()}`,
+        },
+        createdAt: {
+          order: "asc",
+          formatter: (v) => {
+            const timestamp = Math.floor(new Date(v).getTime() / 1000);
 
-          return `<t:${timestamp}:F> • <t:${timestamp}:R>`;
+            return `<t:${timestamp}:F> • <t:${timestamp}:R>`;
+          },
+        },
+        "stats.games": {
+          order: "desc",
+          formatter: (v) => `${v.toLocaleString()}`,
+        },
+        "stats.wins": {
+          order: "desc",
+          formatter: (v) => `${v.toLocaleString()}`,
+        },
+        "stats.losses": {
+          order: "desc",
+          formatter: (v) => `${v.toLocaleString()}`,
+        },
+        "stats.weightedWins": {
+          order: "desc",
+          formatter: (v) => `${v.toLocaleString()}`,
+        },
+        "stats.weightedLosses": {
+          order: "desc",
+          formatter: (v) => `${v.toLocaleString()}`,
+        },
+        "stats.weightedWLRatio": {
+          order: "desc",
+          formatter: (v) => `${v.toLocaleString()}`,
         },
       },
-      "stats.games": {
-        order: "desc",
-        formatter: (v) => `${v.toLocaleString()}`,
-      },
-      "stats.wins": {
-        order: "desc",
-        formatter: (v) => `${v.toLocaleString()}`,
-      },
-      "stats.losses": {
-        order: "desc",
-        formatter: (v) => `${v.toLocaleString()}`,
-      },
-      "stats.weightedWins": {
-        order: "desc",
-        formatter: (v) => `${v.toLocaleString()}`,
-      },
-      "stats.weightedLosses": {
-        order: "desc",
-        formatter: (v) => `${v.toLocaleString()}`,
-      },
-      "stats.weightedWLRatio": {
-        order: "desc",
-        formatter: (v) => `${v.toLocaleString()}`,
+      player: {
+        createdAt: {
+          order: "asc",
+          formatter: (v) => {
+            const timestamp = Math.floor(new Date(v).getTime() / 1000);
+
+            return `<t:${timestamp}:F> • <t:${timestamp}:R>`;
+          },
+        },
       },
     };
 
     const modelMap = {
       [translate("en", "commands.top.data.subcommands.clan.name")]: Clan,
+      [translate("en", "commands.top.data.subcommands.player.name")]: Player,
     };
     const model = modelMap[subCommand];
 
-    const sortOrder = topLabels[topType].order === "desc" ? -1 : 1;
+    const sortOrder = topLabels[subCommand][topType].order === "desc" ? -1 : 1;
 
     const currentPage = 0;
     const itemsPerPage = 10;
 
     const [pageData, totalCount] = await Promise.all([
       model.aggregate([
-        {
-          $addFields: {
-            value: {
-              $ifNull: [`$${topType}`, 0],
-            },
-          },
-        },
-        { $sort: { value: sortOrder } },
+        { $sort: { [topType]: sortOrder } },
         { $skip: currentPage * itemsPerPage },
         { $limit: itemsPerPage },
       ]),
@@ -218,7 +274,7 @@ module.exports = {
       model.countDocuments(),
     ]);
 
-    const { order = "desc", formatter = (v) => v } = topLabels[topType] || {};
+    const { formatter = (v) => v } = topLabels[subCommand][topType] || {};
 
     const totalPages = Math.ceil(totalCount / itemsPerPage);
 
@@ -226,7 +282,7 @@ module.exports = {
       .setAccentColor(config.colors.normal)
       .addTextDisplayComponents((t) =>
         t.setContent(
-          `## 🏆 ${translate(currentLang, "commands.top.data.top")} - ${translate(
+          `## 🏆 ${translate(currentLang, "commands.top.top")} - ${translate(
             currentLang,
             `commands.top.data.subcommands.${subCommand}.options.type.choices.${topType}`,
           )}`,
@@ -239,10 +295,17 @@ module.exports = {
             ? pageData
                 .map(
                   (item, idx) =>
-                    `**#${currentPage * itemsPerPage + idx + 1} ${item.name}**\n↪ ${formatter(item.value)}`,
+                    `**#${currentPage * itemsPerPage + idx + 1} ${
+                      item.name ||
+                      (typeof item.username === "string" &&
+                      item.username.length > 0 &&
+                      !item.username.includes(".")
+                        ? `<:verified:1536780978775654480> ${item.username}`
+                        : item.username?.replace(/\./g, "#") || item.publicId)
+                    }**\n↪ ${formatter(topType.split(".").reduce((acc, key) => acc?.[key], item))}`,
                 )
                 .join("\n")
-            : "Aucune donnée disponible pour ce type de classement précis",
+            : translate(currentLang, "commands.top.no_data"),
         ),
       )
       .addSeparatorComponents((s) => s)
@@ -260,7 +323,9 @@ module.exports = {
             .setStyle(ButtonStyle.Primary),
           new ButtonBuilder()
             .setCustomId("top_page_status")
-            .setLabel(`Page ${currentPage + 1}/${totalPages || 1}`)
+            .setLabel(
+              `${translate(currentLang, "commands.top.page")} ${currentPage + 1}/${totalPages || 1}`,
+            )
             .setDisabled(true)
             .setStyle(ButtonStyle.Secondary),
           new ButtonBuilder()

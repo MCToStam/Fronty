@@ -237,6 +237,8 @@ async function buildDocuments(
 }
 
 async function updateMaps() {
+  log("Map synchronization in progress...", "TASK", "magentaBright");
+
   const bootstrap = await getBootstrapConfig();
 
   const { translations, categoryTranslations } = await loadTranslations(

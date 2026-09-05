@@ -124,6 +124,19 @@
                 }
               }
             }
+          },
+          "player": {
+            "name": "joueur",
+            "description": "Affiche le classement des joueurs",
+            "options": {
+              "type": {
+                "name": "type",
+                "description": "Type de classement à afficher",
+                "choices": {
+                  "createdAt": "Date de Création"
+                }
+              }
+            }
           }
         },
         "top": "Top",
