@@ -1,5 +1,7 @@
 const fs = require("fs");
 const path = require("path");
+const cloudscraper = require("cloudscraper");
+const request = require("request");
 
 const apiCache = new Map();
 
@@ -19,6 +21,30 @@ const tokenCache = {
 const COOKIE_FILE = path.join(__dirname, "..", "openfront-cookies.json");
 
 let refreshPromise = null;
+
+const scraper = cloudscraper.defaults({
+  requester: request,
+});
+
+function scraperRequest(options) {
+  return new Promise((resolve, reject) => {
+    scraper(options, (error, response, body) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      if (!response) {
+        reject(new Error("Cloudscraper n'a retourné aucune réponse HTTP"));
+        return;
+      }
+
+      response.body = body;
+
+      resolve(response);
+    });
+  });
+}
 
 function loadCookies() {
   try {
@@ -61,20 +87,21 @@ function saveCookies(cookies) {
 let cookies = loadCookies();
 
 function getCookieHeader() {
-  if (!cookies.refreshToken) return "";
+  if (!cookies.refreshToken) {
+    return "";
+  }
 
   return `refreshToken=${cookies.refreshToken}`;
 }
 
 function getSetCookies(response) {
-  if (typeof response.headers.getSetCookie === "function")
-    return response.headers.getSetCookie();
+  const setCookie = response.headers?.["set-cookie"];
 
-  const setCookie = response.headers.get("set-cookie");
+  if (!setCookie) {
+    return [];
+  }
 
-  if (!setCookie) return [];
-
-  return [setCookie];
+  return Array.isArray(setCookie) ? setCookie : [setCookie];
 }
 
 function updateCookiesFromResponse(response) {
@@ -85,13 +112,17 @@ function updateCookiesFromResponse(response) {
 
     const separatorIndex = firstPart.indexOf("=");
 
-    if (separatorIndex === -1) continue;
+    if (separatorIndex === -1) {
+      continue;
+    }
 
     const name = firstPart.slice(0, separatorIndex).trim();
 
     const value = firstPart.slice(separatorIndex + 1).trim();
 
-    if (name !== "refreshToken") continue;
+    if (name !== "refreshToken") {
+      continue;
+    }
 
     if (!value) {
       cookies.refreshToken = null;
@@ -101,37 +132,57 @@ function updateCookiesFromResponse(response) {
 
     if (cookies.refreshToken !== value) {
       cookies.refreshToken = value;
-
       saveCookies(cookies);
     }
   }
 }
 
+function parseJson(response) {
+  if (!response.body) {
+    throw new Error("Réponse vide");
+  }
+
+  try {
+    return JSON.parse(response.body);
+  } catch (error) {
+    throw new Error(
+      `Réponse JSON invalide : ${error.message}\n\nBody:\n${response.body}`,
+    );
+  }
+}
+
 async function refreshToken() {
-  if (refreshPromise) return refreshPromise;
+  if (refreshPromise) {
+    return refreshPromise;
+  }
 
   refreshPromise = (async () => {
     if (!cookies.refreshToken) {
       throw new Error(`Aucun refreshToken trouvé dans ${COOKIE_FILE}`);
     }
 
-    const response = await fetch("https://api.openfront.io/auth/refresh", {
+    const response = await scraperRequest({
+      uri: "https://api.openfront.io/auth/refresh",
       method: "POST",
 
       headers: {
         "Content-Type": "application/json",
-
         Cookie: getCookieHeader(),
+        Accept: "application/json",
       },
+
+      gzip: true,
     });
 
     updateCookiesFromResponse(response);
 
-    if (!response.ok) {
-      throw new Error(`Erreur authentification OpenFront : ${response.status}`);
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw new Error(
+        `Erreur authentification OpenFront : ${response.statusCode}\n${response.body || ""}`,
+      );
     }
 
-    const data = await response.json();
+    const data = parseJson(response);
 
     return {
       jwt: data.jwt,
@@ -164,22 +215,28 @@ async function getToken({ withRefreshToken = false } = {}) {
     return cache.jwt;
   }
 
-  const response = await fetch("https://api.openfront.io/auth/refresh", {
+  const response = await scraperRequest({
+    uri: "https://api.openfront.io/auth/refresh",
     method: "POST",
 
     headers: {
       "Content-Type": "application/json",
+      Accept: "application/json",
     },
+
+    gzip: true,
   });
 
-  if (!response.ok) {
-    throw new Error(`Erreur authentification OpenFront : ${response.status}`);
+  if (response.statusCode < 200 || response.statusCode >= 300) {
+    throw new Error(
+      `Erreur authentification OpenFront : ${response.statusCode}\n${response.body || ""}`,
+    );
   }
 
-  const data = await response.json();
+  const data = parseJson(response);
 
   cache.jwt = data.jwt;
-  cache.expiresAt = now + data.expiresIn * 1000;
+  cache.expiresAt = Date.now() + data.expiresIn * 1000;
 
   return cache.jwt;
 }
@@ -193,43 +250,62 @@ async function OpenFrontAPI(url, options = {}) {
     return cached.data;
   }
 
-  const { withRefreshToken = false, ...fetchOptions } = options;
+  const { withRefreshToken = false, ...requestOptions } = options;
 
-  const jwt = await getToken({ withRefreshToken });
-
-  let response = await fetch(url, {
-    ...fetchOptions,
-    headers: {
-      ...(fetchOptions.headers || {}),
-      Authorization: `Bearer ${jwt}`,
-      "Content-Type": "application/json",
-    },
+  const jwt = await getToken({
+    withRefreshToken,
   });
 
-  if (response.status === 401 || response.status === 403) {
+  async function makeRequest(token) {
+    const method = requestOptions.method || "GET";
+
+    const headers = {
+      ...(requestOptions.headers || {}),
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+
+    const scraperOptions = {
+      uri: url,
+      method,
+      headers,
+      gzip: true,
+    };
+
+    if (requestOptions.body !== undefined) {
+      scraperOptions.body = requestOptions.body;
+    }
+
+    if (requestOptions.qs !== undefined) {
+      scraperOptions.qs = requestOptions.qs;
+    }
+
+    return scraperRequest(scraperOptions);
+  }
+
+  let response = await makeRequest(jwt);
+
+  if (response.statusCode === 401 || response.statusCode === 403) {
     const cache = withRefreshToken ? tokenCache.refresh : tokenCache.default;
 
     cache.jwt = null;
     cache.expiresAt = 0;
 
-    const newToken = await getToken({ withRefreshToken });
-
-    response = await fetch(url, {
-      ...fetchOptions,
-
-      headers: {
-        ...(fetchOptions.headers || {}),
-        Authorization: `Bearer ${newToken}`,
-        "Content-Type": "application/json",
-      },
+    const newToken = await getToken({
+      withRefreshToken,
     });
+
+    response = await makeRequest(newToken);
   }
 
-  if (!response.ok) {
-    throw new Error(`Erreur API OpenFront (${response.status})`);
+  if (response.statusCode < 200 || response.statusCode >= 300) {
+    throw new Error(
+      `Erreur API OpenFront (${response.statusCode})\n${response.body || ""}`,
+    );
   }
 
-  const data = await response.json();
+  const data = parseJson(response);
 
   apiCache.set(cacheKey, {
     data,

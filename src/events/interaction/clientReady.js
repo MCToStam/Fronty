@@ -62,8 +62,6 @@ module.exports = async (client) => {
 
   cycleStatus(client);
 
-  await syncPlayers();
-
   if (!client.shard || client.shard.ids.includes(0)) {
     cron.schedule(
       "0 0 * * *",
